@@ -1,6 +1,9 @@
 node_modules/
 .env
+<<<<<<< HEAD
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+=======
+>>>>>>> 48a8a5c13d18134f5ea13488e9550be1107b455d
