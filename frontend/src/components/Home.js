@@ -21,11 +21,16 @@ export default function Home() {
     socket.emit("getQueue");
     socket.on("sending queue", (data) => {
       setQueue(data.queue);
-      console.log(data);
     });
     socket.on("Queue updated", () => {
       socket.emit("getQueue");
     });
+    return () => {
+      socket.off("Queue updated");
+      socket.off("error");
+      socket.off("success");
+      socket.off("request");
+    };
   }, []);
 
   useEffect(() => {
@@ -141,6 +146,7 @@ export default function Home() {
               song={item.song}
               id={item.id}
               artiste={item.artiste}
+              socket={socket}
             />
           ))}
         </div>

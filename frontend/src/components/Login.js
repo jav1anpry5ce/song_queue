@@ -4,7 +4,7 @@ import { Card, Form, Input, Button, Typography } from "antd";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router";
 
-const socket = io("javaughnpryce.live:9091");
+const socket = io("javaughnpryce.live:9091", { autoConnect: false });
 const { Title } = Typography;
 
 export default function Login() {
@@ -13,6 +13,7 @@ export default function Login() {
   const [password, setPassword] = useState();
 
   useEffect(() => {
+    socket.connect();
     if (sessionStorage.getItem("is_auth") === "true") {
       history.push("/");
     }
@@ -25,6 +26,10 @@ export default function Login() {
         alert(data.message);
       }
     });
+    return () => {
+      socket.off("auth");
+      socket.disconnect();
+    };
     // eslint-disable-next-line
   }, []);
 

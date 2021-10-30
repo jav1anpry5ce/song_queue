@@ -32,8 +32,7 @@ io.on("connect", (socket) => {
       if (!existingRequests(data.id)) {
         addToQueue(data);
         socket.emit("success");
-        socket.broadcast.emit("Queue updated");
-        socket.emit("Queue updated");
+        io.emit("Queue updated");
       } else {
         socket.emit("error", {
           message: "You already have a pending request.",
@@ -56,8 +55,7 @@ io.on("connect", (socket) => {
     try {
       if (token === process.env.TOKEN) {
         removeFromQueue(id);
-        socket.broadcast.emit("Queue updated");
-        socket.emit("Queue updated");
+        io.emit("Queue updated");
       } else {
         socket.emit("error", {
           message: "You are not authorized to make this request.",
