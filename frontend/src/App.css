@@ -1,0 +1,25 @@
+.App {
+  display: flex;
+  min-height: 100vh;
+  background-image: url(./images/background.jpg);
+  background-size: cover;
+  background-position: center center;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(104, 104, 104);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(59, 59, 59);
+  border-radius: 5px;
+}
