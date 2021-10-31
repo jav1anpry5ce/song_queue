@@ -1,23 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { Container } from "@mui/material";
-import { Card, Typography, Modal, Input, Form, Button } from "antd";
+import { Card, Typography, Modal, Input, Form, Button, BackTop } from "antd";
 import QueueItem from "./QueueItem";
 import GetTime from "../functions/GetTime";
 import { GrAdd } from "react-icons/gr";
 import { openNotification } from "../functions/Notification";
+import { useDispatch, useSelector } from "react-redux";
+import { getAlbumArt, clearState } from "../store/songSlice";
+import image from "../images/cover1.jpg";
 
 const socket = io("javaughnpryce.live:9091");
 const { Title } = Typography;
 
 export default function Home() {
+  const songData = useSelector((state) => state.song);
+  const dispatch = useDispatch();
   const [queue, setQueue] = useState([]);
   const [show, setShow] = useState(false);
   const [name, setName] = useState();
   const [song, setSong] = useState();
   const [artiste, setArtiste] = useState();
   const [form] = Form.useForm();
+  const [mobile, setMobile] = useState(false);
+  const list = useRef();
+
   useEffect(() => {
+    window.addEventListener("resize", resize);
+    if (window.innerHeight <= 736 || window.innerWidth <= 560) {
+      setMobile(true);
+    } else {
+      setMobile(false);
+    }
     socket.emit("getQueue");
     socket.on("sending queue", (data) => {
       setQueue(data.queue);
@@ -55,32 +69,63 @@ export default function Home() {
     });
   }, [form]);
 
+  useEffect(() => {
+    if (songData.success) {
+      submitSong();
+      dispatch(clearState());
+    }
+    // eslint-disable-next-line
+  }, [songData.success]);
+
   const onSubmit = () => {
-    const data = {
-      id: localStorage.getItem("user_key"),
-      name,
-      song,
-      artiste,
-      time: GetTime(),
-    };
     if (name && song && artiste) {
-      socket.emit("request", data);
+      dispatch(getAlbumArt({ title: song, artiste }));
     } else {
       openNotification("error", "Error", "All fields must be filled!");
     }
   };
 
+  const resize = () => {
+    if (window.innerHeight <= 736 || window.innerWidth <= 560) {
+      setMobile(true);
+    } else {
+      setMobile(false);
+    }
+  };
+
+  const submitSong = () => {
+    if (songData.cover) {
+      const data = {
+        id: localStorage.getItem("user_key"),
+        name,
+        song,
+        artiste,
+        time: GetTime(),
+        cover: songData.cover,
+      };
+      socket.emit("request", data);
+    } else {
+      const data = {
+        id: localStorage.getItem("user_key"),
+        name,
+        song,
+        artiste,
+        time: GetTime(),
+      };
+      socket.emit("request", data);
+    }
+  };
+
   return (
     <Container
-      maxWidth="sm"
+      maxWidth="md"
       style={{
-        marginTop: 25,
-        marginBottom: 7,
+        marginTop: mobile ? 25 : 50,
+        marginBottom: 5,
       }}
     >
       <Button
-        style={{ position: "fixed", bottom: 30, right: 25, zIndex: 20 }}
-        // type="ghost"
+        style={{ position: "fixed", bottom: 10, right: 16, zIndex: 20 }}
         shape="circle"
         size="large"
         block
@@ -92,10 +137,19 @@ export default function Home() {
         destroyOnClose
         onCancel={() => setShow(false)}
         footer={[
-          <Button key="back" onClick={() => setShow(false)}>
+          <Button
+            key="back"
+            onClick={() => setShow(false)}
+            disabled={songData.loading}
+          >
             Return
           </Button>,
-          <Button key="submit" type="primary" onClick={onSubmit}>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={onSubmit}
+            loading={songData.loading}
+          >
             Submit
           </Button>,
         ]}
@@ -107,7 +161,7 @@ export default function Home() {
             style={{ marginBottom: 2 }}
             required
           >
-            <Input onChange={(e) => setName(e.target.value)} />
+            <Input onChange={(e) => setName(e.target.value.trim())} />
           </Form.Item>
           <Form.Item
             name="song"
@@ -115,7 +169,7 @@ export default function Home() {
             style={{ marginBottom: 2 }}
             required
           >
-            <Input onChange={(e) => setSong(e.target.value)} />
+            <Input onChange={(e) => setSong(e.target.value.trim())} />
           </Form.Item>
           <Form.Item
             name="artiste"
@@ -123,7 +177,7 @@ export default function Home() {
             style={{ marginBottom: 2 }}
             required
           >
-            <Input onChange={(e) => setArtiste(e.target.value)} />
+            <Input onChange={(e) => setArtiste(e.target.value.trim())} />
           </Form.Item>
         </Form>
       </Modal>
@@ -138,18 +192,28 @@ export default function Home() {
         }
       >
         <Title level={5}>Songs in Queue: {queue.length}</Title>
-        <div style={{ height: 470, overflow: "auto", padding: 5 }}>
+        <div
+          ref={list}
+          style={{ height: mobile ? 400 : 570, overflow: "auto", padding: 5 }}
+        >
           {queue.map((item, index) => (
             <QueueItem
               key={index}
+              cover={item.cover ? item.cover : image}
               name={item.name}
               song={item.song}
               id={item.id}
               artiste={item.artiste}
               socket={socket}
+              mobile={mobile}
             />
           ))}
         </div>
+        <BackTop
+          style={{ position: "absolute", bottom: 0, right: 0 }}
+          target={() => list.current}
+          visibilityHeight={80}
+        />
       </Card>
     </Container>
   );

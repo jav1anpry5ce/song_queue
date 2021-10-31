@@ -1,9 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
 .App {
   display: flex;
   min-height: 100vh;
   background-image: url(./images/background.jpg);
   background-size: cover;
   background-position: center center;
+}
+* {
+  font-family: "Quicksand", sans-serif;
 }
 
 ::-webkit-scrollbar {

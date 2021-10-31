@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "@mui/material";
-import { Card, Form, Input, Button, Typography } from "antd";
+import { Card, Form, Input, Button, Typography, Alert } from "antd";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router";
 
@@ -11,6 +11,7 @@ export default function Login() {
   const history = useHistory();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [message, setMessage] = useState();
 
   useEffect(() => {
     socket.connect();
@@ -23,7 +24,7 @@ export default function Login() {
         sessionStorage.setItem("is_auth", true);
         history.push("/");
       } else {
-        alert(data.message);
+        setMessage(data.message);
       }
     });
     return () => {
@@ -34,6 +35,7 @@ export default function Login() {
   }, []);
 
   const onSubmit = () => {
+    setMessage("");
     const data = {
       username,
       password,
@@ -53,22 +55,31 @@ export default function Login() {
         style={{ marginTop: 65, borderRadius: 7 }}
         bordered={false}
       >
+        {message && <Alert message={message} type="error" />}
         <Form layout="vertical" onFinish={onSubmit}>
           <Form.Item
             required
             label="Username"
+            name="username"
             style={{ marginBottom: 2 }}
             rules={[{ required: true, message: "Please input your username!" }]}
           >
-            <Input onChange={(e) => setUsername(e.target.value)} />
+            <Input
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+            />
           </Form.Item>
           <Form.Item
             required
             label="Password"
+            name="password"
             style={{ marginBottom: 13 }}
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password onChange={(e) => setPassword(e.target.value)} />
+            <Input.Password
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
           </Form.Item>
           <Form.Item style={{ marginBottom: 2 }}>
             <Button type="primary" htmlType="submit">

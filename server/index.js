@@ -1,7 +1,7 @@
-const { createServer } = require("http");
-const express = require("express");
+const { createServer } = require("https");
 const { Server } = require("socket.io");
-const cors = require("cors");
+const path = require("path");
+const fs = require("fs");
 require("dotenv").config();
 
 const {
@@ -12,21 +12,20 @@ const {
 } = require("./queue");
 
 const { login } = require("./Admin");
-const router = require("./router");
 
-const app = express();
-app.use(cors());
-app.use(router);
-const server = createServer(app);
+const server = createServer({
+  key: fs.readFileSync(path.join(__dirname, "cert", "key.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "cert", "cert.pem")),
+});
+
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://javaughnpryce.live:9090",
     methods: ["GET", "POST"],
   },
 });
 
 io.on("connect", (socket) => {
-  console.log(process.env.USERNAME || process.env.USER);
   socket.on("request", (data, callback) => {
     try {
       if (!existingRequests(data.id)) {

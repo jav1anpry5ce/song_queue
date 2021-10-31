@@ -13,13 +13,15 @@ export const Card = styled.div`
   box-shadow: 1px 1px #cccccc;
   /* max-height: 90px; */
   margin-top: 5px;
+  position: relative;
 `;
 
 export const TextContainer = styled.div`
-  padding: 7px;
+  padding: 10px;
+  padding-right: 11px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-around;
 `;
 
 export const Title = styled.h4`
@@ -29,7 +31,14 @@ export const Title = styled.h4`
 `;
 
 export const Text = styled.p`
-  font-size: 16px;
+  font-size: ${(props) => (props.mobile ? "14px" : "17px")};
   font-style: italic;
   margin: 0px;
+  text-transform: capitalize;
+`;
+
+export const Image = styled.img`
+  width: 105px;
+  height: auto;
+  opacity: 0.93;
 `;
