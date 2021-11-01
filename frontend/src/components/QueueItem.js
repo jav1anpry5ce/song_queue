@@ -32,6 +32,11 @@ export default function QueueItem({
     }
   }, []);
 
+  const onClick = () => {
+    const url = `https://www.youtube.com/results?search_query=${song}+${artiste}+karaoke`;
+    if (!mobile) window.open(url, "_blank");
+  };
+
   return (
     <Card>
       <Container>
@@ -52,7 +57,11 @@ export default function QueueItem({
           </Popover>
         )}
         <TextContainer>
-          <Text mobile={mobile ? mobile : null}>
+          <Text
+            mobile={mobile ? mobile : null}
+            onClick={onClick}
+            hover={!mobile}
+          >
             Song Title: {song.toLowerCase()}
           </Text>
           <Text mobile={mobile ? mobile : null}>

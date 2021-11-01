@@ -35,6 +35,12 @@ export const Text = styled.p`
   font-style: italic;
   margin: 0px;
   text-transform: capitalize;
+
+  &:hover {
+    text-decoration: ${(props) => (props.hover ? "underline" : null)};
+    cursor: ${(props) => (props.hover ? "pointer" : null)};
+    color: ${(props) => (props.hover ? "#a24ac2" : "black")};
+  }
 `;
 
 export const Image = styled.img`

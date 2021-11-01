@@ -1,7 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { Container } from "@mui/material";
-import { Card, Typography, Modal, Input, Form, Button, BackTop } from "antd";
+import {
+  Card,
+  Typography,
+  Modal,
+  Input,
+  Form,
+  Button,
+  BackTop,
+  Spin,
+} from "antd";
 import QueueItem from "./QueueItem";
 import GetTime from "../functions/GetTime";
 import { GrAdd } from "react-icons/gr";
@@ -9,8 +18,10 @@ import { openNotification } from "../functions/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { getAlbumArt, clearState } from "../store/songSlice";
 import image from "../images/cover1.jpg";
+import { LoadingOutlined } from "@ant-design/icons";
+import RandomColor from "../functions/RandomColor";
 
-const socket = io("javaughnpryce.live:9091");
+const socket = io("https://javaughnpryce.live:9091");
 const { Title } = Typography;
 
 export default function Home() {
@@ -183,7 +194,7 @@ export default function Home() {
       </Modal>
       <Card
         bordered={false}
-        style={{ borderRadius: 5 }}
+        style={{ borderRadius: 5, position: "relative" }}
         headStyle={{ backgroundColor: "#7e3033" }}
         title={
           <Title align="center" style={{ color: "white" }}>
@@ -214,6 +225,23 @@ export default function Home() {
           target={() => list.current}
           visibilityHeight={80}
         />
+        {queue.length === 0 && (
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 65,
+                  color: `${RandomColor()}`,
+                  alignSelf: "center",
+                  position: "absolute",
+                  left: "45%",
+                  bottom: "45%",
+                }}
+              />
+            }
+            size="large"
+          />
+        )}
       </Card>
     </Container>
   );
