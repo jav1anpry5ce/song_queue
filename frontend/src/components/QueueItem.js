@@ -102,7 +102,8 @@ export default function QueueItem({
             width={105}
             height={101}
             src={cover}
-            alt={cover}
+            alt="album cover"
+            onError={() => console.log(`Failed to load image at ${cover}`)}
           />
         )}
       </Container>

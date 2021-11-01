@@ -31,6 +31,8 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
+  io.emit("sending queue", { queue: getQueue() });
+
   socket.on("request", (data) => {
     try {
       if (!existingRequests(data.id)) {
