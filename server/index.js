@@ -3,6 +3,7 @@ const { Server } = require("socket.io");
 const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
+const { instrument } = require("@socket.io/admin-ui");
 
 const {
   addToQueue,
@@ -20,12 +21,16 @@ const server = createServer({
 
 const io = new Server(server, {
   cors: {
-    origin: "https://javaughnpryce.live:9090",
+    origin: [
+      "https://javaughnpryce.live:9090",
+      "https://admin.socket.io",
+      "http://localhost:3000",
+    ],
     methods: ["GET", "POST"],
   },
 });
 
-io.on("connect", (socket) => {
+io.on("connection", (socket) => {
   socket.on("request", (data) => {
     try {
       if (!existingRequests(data.id)) {
@@ -72,6 +77,14 @@ io.on("connect", (socket) => {
       socket.emit("auth", { message: "Invalid username and/or password" });
     }
   });
+});
+
+instrument(io, {
+  auth: {
+    type: "basic",
+    username: "admin",
+    password: "$2a$12$JTt3LfCNhfkXe4yoRrY/5eE33fqDfpRDHNjYPtK5ClY9/HaU7bU3y",
+  },
 });
 
 server.listen(process.env.PORT, process.env.IP, () =>

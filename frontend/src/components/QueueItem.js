@@ -62,13 +62,13 @@ export default function QueueItem({
             onClick={onClick}
             hover={!mobile}
           >
-            Song Title: {song.toLowerCase()}
+            Song Title: {song.toLocaleLowerCase()}
           </Text>
           <Text mobile={mobile ? mobile : null}>
-            Artiste: {artiste.toLowerCase()}
+            Artiste: {artiste.toLocaleLowerCase()}
           </Text>
           <Text mobile={mobile ? mobile : null}>
-            Requested By: {name.toLowerCase()}
+            Requested By: {name.toLocaleLowerCase()}
           </Text>
         </TextContainer>
         {cover && !mobile && (

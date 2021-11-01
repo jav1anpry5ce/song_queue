@@ -48,6 +48,9 @@ export default function Home() {
     socket.on("Queue updated", () => {
       socket.emit("getQueue");
     });
+    socket.on("reconnect", () => {
+      socket.emit("getQueue");
+    });
     return () => {
       socket.off("Queue updated");
       socket.off("error");
@@ -170,7 +173,11 @@ export default function Home() {
             style={{ marginBottom: 2 }}
             required
           >
-            <Input onChange={(e) => setName(e.target.value.trim())} />
+            <Input
+              onChange={(e) =>
+                setName(e.target.value.trim().toLocaleLowerCase())
+              }
+            />
           </Form.Item>
           <Form.Item
             name="song"
@@ -178,7 +185,11 @@ export default function Home() {
             style={{ marginBottom: 2 }}
             required
           >
-            <Input onChange={(e) => setSong(e.target.value.trim())} />
+            <Input
+              onChange={(e) =>
+                setSong(e.target.value.trim().toLocaleLowerCase())
+              }
+            />
           </Form.Item>
           <Form.Item
             name="artiste"
@@ -186,7 +197,11 @@ export default function Home() {
             style={{ marginBottom: 2 }}
             required
           >
-            <Input onChange={(e) => setArtiste(e.target.value.trim())} />
+            <Input
+              onChange={(e) =>
+                setArtiste(e.target.value.trim().toLocaleLowerCase())
+              }
+            />
           </Form.Item>
         </Form>
       </Modal>
