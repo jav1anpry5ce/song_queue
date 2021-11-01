@@ -14,6 +14,10 @@ export const Card = styled.div`
   /* max-height: 90px; */
   margin-top: 5px;
   position: relative;
+
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
 `;
 
 export const TextContainer = styled.div`

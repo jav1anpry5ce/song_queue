@@ -38,7 +38,7 @@ export default function Home() {
 
   useEffect(() => {
     window.addEventListener("resize", resize);
-    if (window.innerHeight <= 736 || window.innerWidth <= 560) {
+    if (window.innerHeight <= 600 || window.innerWidth <= 560) {
       setMobile(true);
     } else {
       setMobile(false);
@@ -97,7 +97,7 @@ export default function Home() {
   };
 
   const resize = () => {
-    if (window.innerHeight <= 736 || window.innerWidth <= 560) {
+    if (window.innerHeight <= 600 || window.innerWidth <= 560) {
       setMobile(true);
     } else {
       setMobile(false);
