@@ -26,7 +26,7 @@ const io = new Server(server, {
 });
 
 io.on("connect", (socket) => {
-  socket.on("request", (data, callback) => {
+  socket.on("request", (data) => {
     try {
       if (!existingRequests(data.id)) {
         addToQueue(data);
