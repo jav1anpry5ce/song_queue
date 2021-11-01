@@ -12,14 +12,12 @@ import {
   Spin,
 } from "antd";
 import QueueItem from "./QueueItem";
-import GetTime from "../functions/GetTime";
 import { GrAdd } from "react-icons/gr";
-import { openNotification } from "../functions/Notification";
 import { useDispatch, useSelector } from "react-redux";
 import { getAlbumArt, clearState } from "../store/songSlice";
 import image from "../images/cover1.jpg";
 import { LoadingOutlined } from "@ant-design/icons";
-import RandomColor from "../functions/RandomColor";
+import { GetTime, RandomColor, openNotification } from "../functions/";
 
 const socket = io("https://javaughnpryce.live:9091");
 const { Title } = Typography;

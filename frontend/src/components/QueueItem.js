@@ -3,8 +3,8 @@ import { Container, Card, Text, TextContainer } from "./Elements";
 import { AiOutlineMore } from "react-icons/ai";
 import { Popover, Button } from "antd";
 import { Image, Spin } from "antd";
-import RandomColor from "../functions/RandomColor";
 import { LoadingOutlined } from "@ant-design/icons";
+import { RandomColor } from "../functions";
 
 const Content = ({ id, token, socket }) => {
   const onRemove = () => {
