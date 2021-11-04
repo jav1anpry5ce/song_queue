@@ -5,6 +5,7 @@ import { Popover, Button } from "antd";
 import { Image, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { RandomColor } from "../functions";
+import image from "../images/cover1.jpg";
 
 const Content = ({ id, token, socket }) => {
   const onRemove = () => {
@@ -24,12 +25,15 @@ export default function QueueItem({
 }) {
   const [isAuth, setIsAuth] = useState(false);
   const [token, setToken] = useState();
+  const [backup, setBackup] = useState(null);
 
   useEffect(() => {
     if (sessionStorage.getItem("is_auth") === "true") {
       setIsAuth(true);
       setToken(sessionStorage.getItem("token"));
     }
+    setBackup(cover);
+    // eslint-disable-next-line
   }, []);
 
   const onClick = () => {
@@ -101,9 +105,9 @@ export default function QueueItem({
             }
             width={105}
             height={101}
-            src={cover}
+            src={backup}
             alt="album cover"
-            onError={() => console.log(`Failed to load image at ${cover}`)}
+            onError={() => setBackup(image)}
           />
         )}
       </Container>

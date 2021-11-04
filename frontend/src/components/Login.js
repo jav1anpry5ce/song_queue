@@ -4,7 +4,7 @@ import { Card, Form, Input, Button, Typography, Alert } from "antd";
 import { io } from "socket.io-client";
 import { useHistory } from "react-router";
 
-const socket = io("javaughnpryce.live:9091", { autoConnect: false });
+const socket = io("https://javaughnpryce.live:9091", { autoConnect: false });
 const { Title } = Typography;
 
 export default function Login() {

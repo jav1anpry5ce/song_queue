@@ -21,7 +21,6 @@ export const Card = styled.div`
 
 export const TextContainer = styled.div`
   padding: 10px;
-  padding-right: 11px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

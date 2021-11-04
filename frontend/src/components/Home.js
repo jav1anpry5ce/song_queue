@@ -43,6 +43,7 @@ export default function Home() {
     }
     socket.emit("getQueue");
     socket.on("sending queue", (data) => {
+      console.log(data);
       setQueue(data.queue);
     });
     socket.on("Queue updated", () => {
