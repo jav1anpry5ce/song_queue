@@ -33,6 +33,7 @@ export default function Home() {
   const [form] = Form.useForm();
   const [mobile, setMobile] = useState(false);
   const list = useRef();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     window.addEventListener("resize", resize);
@@ -51,6 +52,10 @@ export default function Home() {
     socket.on("reconnect", () => {
       socket.emit("getQueue");
     });
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
     return () => {
       socket.off("Queue updated");
       socket.off("error");
@@ -207,7 +212,10 @@ export default function Home() {
       </Modal>
       <Card
         bordered={false}
-        style={{ borderRadius: 5, position: "relative" }}
+        style={{
+          borderRadius: 5,
+          position: "relative",
+        }}
         headStyle={{ backgroundColor: "#7e3033" }}
         title={
           <Title align="center" style={{ color: "white" }}>
@@ -232,29 +240,44 @@ export default function Home() {
               mobile={mobile}
             />
           ))}
+          {loading && queue.length === 0 && (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 65,
+                    color: `${RandomColor()}`,
+                    alignSelf: "center",
+                    position: "absolute",
+                    left: "45%",
+                    bottom: "45%",
+                  }}
+                />
+              }
+              size="large"
+            />
+          )}
+          {!loading && queue.length === 0 && (
+            <Title
+              align="center"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                textAlign: "center",
+                height: "80%",
+              }}
+            >
+              No Songs in Queue
+            </Title>
+          )}
         </div>
         <BackTop
           style={{ position: "absolute", bottom: 0, right: 0 }}
           target={() => list.current}
-          visibilityHeight={80}
+          visibilityHeight={480}
+          duration={3000}
         />
-        {queue.length === 0 && (
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 65,
-                  color: `${RandomColor()}`,
-                  alignSelf: "center",
-                  position: "absolute",
-                  left: "45%",
-                  bottom: "45%",
-                }}
-              />
-            }
-            size="large"
-          />
-        )}
       </Card>
     </Container>
   );
