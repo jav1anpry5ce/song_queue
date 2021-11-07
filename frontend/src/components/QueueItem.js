@@ -14,6 +14,10 @@ const Content = ({ id, token, socket }) => {
   return <Button onClick={onRemove}>Remove</Button>;
 };
 
+const Edit = ({ setShowUpdate }) => {
+  return <Button onClick={() => setShowUpdate(true)}>Edit</Button>;
+};
+
 export default function QueueItem({
   name,
   song,
@@ -22,6 +26,7 @@ export default function QueueItem({
   id,
   socket,
   mobile,
+  setShowUpdate,
 }) {
   const [isAuth, setIsAuth] = useState(false);
   const [token, setToken] = useState();
@@ -48,6 +53,22 @@ export default function QueueItem({
           <Popover
             placement="left"
             content={() => <Content id={id} token={token} socket={socket} />}
+          >
+            <AiOutlineMore
+              style={{
+                fontSize: 20,
+                position: "absolute",
+                left: -5,
+                top: "40%",
+                rotate: "90deg",
+              }}
+            />
+          </Popover>
+        )}
+        {localStorage.getItem("user_key") === id && (
+          <Popover
+            placement="left"
+            content={() => <Edit setShowUpdate={setShowUpdate} />}
           >
             <AiOutlineMore
               style={{

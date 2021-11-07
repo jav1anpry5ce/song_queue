@@ -10,6 +10,7 @@ const {
   getQueue,
   removeFromQueue,
   existingRequests,
+  updateItem,
 } = require("./queue");
 
 const { login } = require("./Admin");
@@ -67,6 +68,15 @@ io.on("connection", (socket) => {
           message: "You are not authorized to make this request.",
         });
       }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  socket.on("updateSong", (data) => {
+    try {
+      updateItem(data.id, data.newSong, data.newArtiste, data.newCover);
+      io.emit("Updatesuccess", { queue: getQueue() });
     } catch (e) {
       console.log(e);
     }

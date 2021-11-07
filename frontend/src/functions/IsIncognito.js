@@ -6,7 +6,7 @@ export default async function IsIngcognito() {
     const { usage, quota } = await navigator.storage.estimate();
     const quotaInMib = Math.round(quota / (1024 * 1024));
     console.log(`Using ${usage} out of ${quota} bytes.`);
-    if (quotaInMib <= 200000) {
+    if (quotaInMib <= 5000) {
       setPrivate(true);
     } else {
       setPrivate(false);

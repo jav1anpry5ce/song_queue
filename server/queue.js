@@ -13,6 +13,13 @@ const existingRequests = (id) => {
   }
 };
 
+const updateItem = (id, newSong, newArtiste, newCover) => {
+  const item = queue.filter((item) => item.id === id);
+  item[0].song = newSong;
+  item[0].artiste = newArtiste;
+  item[0].cover = newCover;
+};
+
 const getQueue = () => queue;
 
 const removeFromQueue = (id) => {
@@ -25,4 +32,5 @@ module.exports = {
   getQueue,
   removeFromQueue,
   existingRequests,
+  updateItem,
 };

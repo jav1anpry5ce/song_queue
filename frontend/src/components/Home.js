@@ -18,6 +18,7 @@ import { getAlbumArt, clearState } from "../store/songSlice";
 import image from "../images/cover1.jpg";
 import { LoadingOutlined } from "@ant-design/icons";
 import { GetTime, RandomColor, openNotification } from "../functions/";
+import UpdateItem from "./UpdateItem";
 
 const socket = io("https://javaughnpryce.live:9091");
 const { Title } = Typography;
@@ -34,6 +35,7 @@ export default function Home() {
   const [mobile, setMobile] = useState(false);
   const list = useRef();
   const [loading, setLoading] = useState(false);
+  const [showUpdate, setShowUpdate] = useState(false);
 
   useEffect(() => {
     window.addEventListener("resize", resize);
@@ -49,8 +51,10 @@ export default function Home() {
     socket.on("Queue updated", () => {
       socket.emit("getQueue");
     });
-    socket.on("reconnect", () => {
-      socket.emit("getQueue");
+    socket.on("Updatesuccess", (data) => {
+      setQueue([]);
+      setQueue(data.queue);
+      setShowUpdate(false);
     });
     setLoading(true);
     setTimeout(() => {
@@ -141,14 +145,17 @@ export default function Home() {
         marginBottom: 5,
       }}
     >
-      <Button
-        style={{ position: "fixed", bottom: 10, right: 16, zIndex: 20 }}
-        shape="circle"
-        size="large"
-        block
-        icon={<GrAdd style={{ fontSize: 28, color: "white" }} />}
-        onClick={() => setShow(true)}
-      />
+      {sessionStorage.getItem("is_auth") !== "true" && (
+        <Button
+          style={{ position: "fixed", bottom: 10, right: 16, zIndex: 20 }}
+          shape="circle"
+          size="large"
+          block
+          icon={<GrAdd style={{ fontSize: 28, color: "white" }} />}
+          onClick={() => setShow(true)}
+        />
+      )}
+
       <Modal
         visible={show}
         destroyOnClose
@@ -238,8 +245,14 @@ export default function Home() {
               artiste={item.artiste}
               socket={socket}
               mobile={mobile}
+              setShowUpdate={setShowUpdate}
             />
           ))}
+          <UpdateItem
+            setShowUpdate={setShowUpdate}
+            showUpdate={showUpdate}
+            socket={socket}
+          />
           {loading && queue.length === 0 && (
             <Spin
               indicator={
